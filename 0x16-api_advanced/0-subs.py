@@ -9,7 +9,7 @@ def number_of_subscribers(subreddit):
 
     url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
     headers = {
-        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by TechGuru)"
+        "User-Agent": "sigma-pe"
     }
 
     response = requests.get(url, headers=headers, allow_redirects=False)
@@ -17,5 +17,12 @@ def number_of_subscribers(subreddit):
     if response.status_code == 404:
         return 0
 
-    results = response.json().get("data")
-    return results.get("subscribers")
+    try:
+        results = response.json().get("data")
+        return results.get("subscribers")
+    except (ValueError, AttributeError, TypeError):
+        # Handle JSON parsing errors or missing keys
+        print("Error parsing JSON or missing key")
+        print("Response content:", response.content)
+        return 0
+
