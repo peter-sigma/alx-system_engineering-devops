@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""A program to querry first 10 hot posts titles""""
 
 from requests import get
 
