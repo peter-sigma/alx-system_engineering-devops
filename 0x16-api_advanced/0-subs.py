@@ -1,28 +1,23 @@
 #!/usr/bin/python3
-"""A program to query subscribers on a Reddit subreddit."""
-
+'''
+   number_of_subscribers
+'''
 import requests
+from sys import argv
 
 
 def number_of_subscribers(subreddit):
-    """Return the total number of subscribers in a subreddit."""
-
-    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
-    headers = {
-        "User-Agent": "sigma-pe"
-    }
-
-    response = requests.get(url, headers=headers, allow_redirects=False)
-
-    if response.status_code == 404:
-        return 0
-
+    '''
+        A function that returns the number of subscribers for a given subreddit
+    '''
+    usr = {'User-Agent': 'sigmapee'}
+    url = requests.get('https://www.reddit.com/r/{}/about.json'
+                       .format(subreddit), headers=usr).json()
     try:
-        results = response.json().get("data")
-        return results.get("subscribers")
-    except (ValueError, AttributeError, TypeError):
-        # Handle JSON parsing errors or missing keys
-        print("Error parsing JSON or missing key")
-        print("Response content:", response.content)
+        return url.get('data').get('subscribers')
+    except Exception:
         return 0
 
+
+if __name__ == "__main__":
+    number_of_subscribers(argv[1])
